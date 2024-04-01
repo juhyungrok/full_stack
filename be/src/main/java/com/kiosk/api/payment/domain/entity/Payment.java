@@ -13,7 +13,6 @@ public class Payment {
     private Long paymentId;
     private Long orderId;
     private Integer totalPrice;
-    private Integer receivedPrice;
-    private Integer remainedPrice;
+
     private PaymentMethod method;
 }

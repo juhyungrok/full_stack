@@ -27,9 +27,8 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
     @Override
     public Long save(Payment payment) {
-        String sql =
-            "INSERT INTO payment (order_id, payment_total_price, payment_received_price, payment_remained_price, payment_method) "
-                + "values (:orderId, :totalPrice, :receivedPrice, :remainedPrice, :method)";
+        String sql = "INSERT INTO payment (order_id, payment_total_price,  payment_method) "
+                + "values (:orderId, :totalPrice, :method)";
 
         BeanPropertySqlParameterSource param = getBeanPropertySqlParameterSourcePayment(payment);
         param.registerSqlType("payment_method", Types.VARCHAR);
@@ -55,8 +54,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
     @Override
     public Optional<Payment> findBy(final Long paymentId) {
-        String sql =
-            "SELECT payment_id, order_id, payment_total_price, payment_received_price, payment_remained_price, payment_method "
+        String sql = "SELECT payment_id, order_id, payment_total_price, payment_method "
                 + "FROM payment "
                 + "WHERE payment_id = :paymentId";
 
@@ -67,8 +65,7 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     // 1:1 이니까 1개만 가져오고 싶은데
     @Override
     public Optional<Payment> findByOrderId(Long orderId) {
-        String sql =
-            "SELECT payment_id, order_id, payment_total_price, payment_received_price, payment_remained_price, payment_method "
+        String sql = "SELECT payment_id, order_id, payment_total_price,payment_method "
                 + "FROM payment "
                 + "WHERE order_id = :orderId";
 
@@ -78,12 +75,11 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
     private RowMapper<Payment> rowMapper() {
         return (rs, rn) -> Payment.builder()
-            .paymentId(rs.getLong("payment_id"))
-            .orderId(rs.getLong("order_id"))
-            .totalPrice(rs.getInt("payment_total_price"))
-            .receivedPrice(rs.getInt("payment_received_price"))
-            .remainedPrice(rs.getInt("payment_remained_price"))
-            .method(PaymentMethod.from(rs.getString("payment_method")))
-            .build();
+                .paymentId(rs.getLong("payment_id"))
+                .orderId(rs.getLong("order_id"))
+                .totalPrice(rs.getInt("payment_total_price"))
+
+                .method(PaymentMethod.from(rs.getString("payment_method")))
+                .build();
     }
 }

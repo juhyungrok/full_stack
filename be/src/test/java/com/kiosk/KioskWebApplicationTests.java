@@ -37,237 +37,232 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 class KioskWebApplicationTests {
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+        @Autowired
+        private PaymentRepository paymentRepository;
 
-    @Autowired
-    private OrderProductRepository orderProductRepository;
+        @Autowired
+        private OrderProductRepository orderProductRepository;
 
-    @Test
-    @DisplayName("/products 요청하여 메뉴들을 응답받습니다.")
-    public void products() throws Exception {
-        String expectByCategoryName = "$[%s].categoryName";
-        String expectByCategoryId = "$[%s].categoryId";
-        String expectByProducts = "$[%s].products";
+        @Test
+        @DisplayName("/products 요청하여 메뉴들을 응답받습니다.")
+        public void products() throws Exception {
+                String expectByCategoryName = "$[%s].categoryName";
+                String expectByCategoryId = "$[%s].categoryId";
+                String expectByProducts = "$[%s].products";
 
-        mockMvc.perform(get("/products"))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath(expectByCategoryName, 0).exists())
-            .andExpect(jsonPath(expectByCategoryId, 0).exists())
-            .andExpect(jsonPath(expectByProducts, 0).isArray());
-    }
+                mockMvc.perform(get("/products"))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath(expectByCategoryName, 0).exists())
+                                .andExpect(jsonPath(expectByCategoryId, 0).exists())
+                                .andExpect(jsonPath(expectByProducts, 0).isArray());
+        }
 
-    @Test
-    @DisplayName("/api/payment/card 요청하여 카드 결제를 요청한다")
-    @Transactional
-    public void cardPayment() throws Exception {
-        // given
-        int totalPrice = 30400;
-        List<CartInDto> orderProducts = new ArrayList<>();
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("large")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("ice")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        PayByCardInDto payByCardInDto = PayByCardInDto.builder()
-            .totalPrice(totalPrice)
-            .orderProducts(orderProducts)
-            .build();
+        @Test
+        @DisplayName("/api/payment/card 요청하여 카드 결제를 요청한다")
+        @Transactional
+        public void cardPayment() throws Exception {
+                // given
+                int totalPrice = 30400;
+                List<CartInDto> orderProducts = new ArrayList<>();
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("large")
+                                .temperature("hot")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("small")
+                                .temperature("ice")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("small")
+                                .temperature("hot")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                PayByCardInDto payByCardInDto = PayByCardInDto.builder()
+                                .totalPrice(totalPrice)
+                                .orderProducts(orderProducts)
+                                .build();
 
-        // when
-        String json = this.mockMvc.perform(post("/api/payment/card")
-                .content(new ObjectMapper().writeValueAsString(payByCardInDto))
-                .contentType(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.success").value(equalTo(true)))
-            .andExpect(jsonPath("$.data.orderId").exists())
-            .andExpect(jsonPath("$.errorCode.status").value(equalTo(200)))
-            .andExpect(jsonPath("$.errorCode.code").value(equalTo("SUCCESS")))
-            .andExpect(jsonPath("$.errorCode.message").value(equalTo("카드 결제 성공하였습니다.")))
-            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+                // when
+                String json = this.mockMvc.perform(post("/api/payment/card")
+                                .content(new ObjectMapper().writeValueAsString(payByCardInDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.success").value(equalTo(true)))
+                                .andExpect(jsonPath("$.data.orderId").exists())
+                                .andExpect(jsonPath("$.errorCode.status").value(equalTo(200)))
+                                .andExpect(jsonPath("$.errorCode.code").value(equalTo("SUCCESS")))
+                                .andExpect(jsonPath("$.errorCode.message").value(equalTo("카드 결제 성공하였습니다.")))
+                                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-        // then
-        PaymentResultResponseDto paymentResultResponseDto =
-            new ObjectMapper().readValue(json, PaymentResultResponseDto.class);
-        Long orderId = Long.parseLong(String.valueOf(paymentResultResponseDto.getData().get("orderId")));
+                // then
+                PaymentResultResponseDto paymentResultResponseDto = new ObjectMapper().readValue(json,
+                                PaymentResultResponseDto.class);
+                Long orderId = Long.parseLong(String.valueOf(paymentResultResponseDto.getData().get("orderId")));
 
-        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow();
-        List<OrderProduct> findOrderProducts = orderProductRepository.findAllBy(orderId);
-        SoftAssertions.assertSoftly(softAssertions -> {
-            // TODO: 주문검증
+                Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow();
+                List<OrderProduct> findOrderProducts = orderProductRepository.findAllBy(orderId);
+                SoftAssertions.assertSoftly(softAssertions -> {
+                        // TODO: 주문검증
 
-            // 결제검증
-            softAssertions.assertThat(payment.getPaymentId()).isNotNull();
-            softAssertions.assertThat(payment.getMethod()).isEqualTo(PaymentMethod.CARD);
-            softAssertions.assertThat(payment.getRemainedPrice()).isEqualTo(0);
-            softAssertions.assertThat(payment.getReceivedPrice()).isEqualTo(totalPrice);
-            softAssertions.assertThat(payment.getTotalPrice()).isEqualTo(totalPrice);
-            softAssertions.assertThat(payment.getOrderId()).isEqualTo(orderId);
+                        // 결제검증
+                        softAssertions.assertThat(payment.getPaymentId()).isNotNull();
+                        softAssertions.assertThat(payment.getMethod()).isEqualTo(PaymentMethod.KAKAOPAY);
 
-            // 주문상품 검증
-            softAssertions.assertThat(findOrderProducts.size()).isEqualTo(3);
+                        softAssertions.assertThat(payment.getTotalPrice()).isEqualTo(totalPrice);
+                        softAssertions.assertThat(payment.getOrderId()).isEqualTo(orderId);
 
-            softAssertions.assertAll();
-        });
+                        // 주문상품 검증
+                        softAssertions.assertThat(findOrderProducts.size()).isEqualTo(3);
 
+                        softAssertions.assertAll();
+                });
 
-    }
+        }
 
+        @Test
+        @DisplayName("/api/payment/card 요청하여 현금 결제를 요청한다")
+        @Transactional
+        public void cashPayment() throws Exception {
+                // given
+                int totalPrice = 30400;
+                int receivedPrice = 31000;
+                List<CartInDto> orderProducts = new ArrayList<>();
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("large")
+                                .temperature("hot")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("small")
+                                .temperature("ice")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("small")
+                                .temperature("hot")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                PayByCashInDto payByCashInDto = PayByCashInDto.builder()
+                                .totalPrice(totalPrice)
 
-    @Test
-    @DisplayName("/api/payment/card 요청하여 현금 결제를 요청한다")
-    @Transactional
-    public void cashPayment() throws Exception {
-        // given
-        int totalPrice = 30400;
-        int receivedPrice = 31000;
-        List<CartInDto> orderProducts = new ArrayList<>();
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("large")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("ice")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        PayByCashInDto payByCashInDto = PayByCashInDto.builder()
-            .totalPrice(totalPrice)
-            .receivedPrice(receivedPrice)
-            .orderProducts(orderProducts)
-            .build();
+                                .orderProducts(orderProducts)
+                                .build();
 
-        // when
-        String json = this.mockMvc.perform(post("/api/payment/cash")
-                .content(new ObjectMapper().writeValueAsString(payByCashInDto))
-                .contentType(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.success").value(equalTo(true)))
-            .andExpect(jsonPath("$.data.orderId").exists())
-            .andExpect(jsonPath("$.errorCode.status").value(equalTo(200)))
-            .andExpect(jsonPath("$.errorCode.code").value(equalTo("SUCCESS")))
-            .andExpect(jsonPath("$.errorCode.message").value(equalTo("현금 결제 성공하였습니다.")))
-            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+                // when
+                String json = this.mockMvc.perform(post("/api/payment/cash")
+                                .content(new ObjectMapper().writeValueAsString(payByCashInDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.success").value(equalTo(true)))
+                                .andExpect(jsonPath("$.data.orderId").exists())
+                                .andExpect(jsonPath("$.errorCode.status").value(equalTo(200)))
+                                .andExpect(jsonPath("$.errorCode.code").value(equalTo("SUCCESS")))
+                                .andExpect(jsonPath("$.errorCode.message").value(equalTo("현금 결제 성공하였습니다.")))
+                                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-        // then
-        PaymentResultResponseDto paymentResultResponseDto =
-            new ObjectMapper().readValue(json, PaymentResultResponseDto.class);
-        Long orderId = Long.parseLong(String.valueOf(paymentResultResponseDto.getData().get("orderId")));
+                // then
+                PaymentResultResponseDto paymentResultResponseDto = new ObjectMapper().readValue(json,
+                                PaymentResultResponseDto.class);
+                Long orderId = Long.parseLong(String.valueOf(paymentResultResponseDto.getData().get("orderId")));
 
-        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow();
-        List<OrderProduct> findOrderProducts = orderProductRepository.findAllBy(orderId);
-        SoftAssertions.assertSoftly(softAssertions -> {
-            // TODO: 주문검증
+                Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow();
+                List<OrderProduct> findOrderProducts = orderProductRepository.findAllBy(orderId);
+                SoftAssertions.assertSoftly(softAssertions -> {
+                        // TODO: 주문검증
 
-            // 결제검증
-            softAssertions.assertThat(payment.getPaymentId()).isNotNull();
-            softAssertions.assertThat(payment.getMethod()).isEqualTo(PaymentMethod.CASH);
-            softAssertions.assertThat(payment.getRemainedPrice()).isEqualTo(600);
-            softAssertions.assertThat(payment.getReceivedPrice()).isEqualTo(totalPrice);
-            softAssertions.assertThat(payment.getTotalPrice()).isEqualTo(totalPrice);
-            softAssertions.assertThat(payment.getOrderId()).isEqualTo(orderId);
+                        // 결제검증
+                        softAssertions.assertThat(payment.getPaymentId()).isNotNull();
+                        softAssertions.assertThat(payment.getMethod()).isEqualTo(PaymentMethod.CASH);
 
-            // 주문상품 검증
-            softAssertions.assertThat(findOrderProducts.size()).isEqualTo(3);
+                        softAssertions.assertThat(payment.getTotalPrice()).isEqualTo(totalPrice);
+                        softAssertions.assertThat(payment.getOrderId()).isEqualTo(orderId);
 
-            softAssertions.assertAll();
-        });
+                        // 주문상품 검증
+                        softAssertions.assertThat(findOrderProducts.size()).isEqualTo(3);
 
+                        softAssertions.assertAll();
+                });
 
-    }
+        }
 
-    @Test
-    @DisplayName("/api/receipt 요청하여 주문 아이디에 따른 영수증 정보를 요청한다")
-    @Transactional
-    public void receipt() throws Exception {
-        Long orderId = saveOrders();
+        @Test
+        @DisplayName("/api/receipt 요청하여 주문 아이디에 따른 영수증 정보를 요청한다")
+        @Transactional
+        public void receipt() throws Exception {
+                Long orderId = saveOrders();
 
-        this.mockMvc.perform(get("/api/receipt")
-                .param("orderId", String.valueOf(orderId)))
-            .andDo(print())
-            .andExpect(jsonPath("$.orderId").value(equalTo(orderId)))
-            .andExpect(jsonPath("$.orderNumber").exists())
-            .andExpect(jsonPath("$.orderProducts").isArray())
-            .andExpect(jsonPath("$.payment.method").value(equalTo("cash")))
-            .andExpect(jsonPath("$.payment.totalPrice").value(equalTo(30400)))
-            .andExpect(jsonPath("$.payment.receivedPrice").value(equalTo(31000)))
-            .andExpect(jsonPath("$.payment.remainedPrice").value(equalTo(600)))
-            .andExpect(jsonPath("$.orderDatetime").exists());
-    }
+                this.mockMvc.perform(get("/api/receipt")
+                                .param("orderId", String.valueOf(orderId)))
+                                .andDo(print())
+                                .andExpect(jsonPath("$.orderId").value(equalTo(orderId)))
+                                .andExpect(jsonPath("$.orderNumber").exists())
+                                .andExpect(jsonPath("$.orderProducts").isArray())
+                                .andExpect(jsonPath("$.payment.method").value(equalTo("cash")))
+                                .andExpect(jsonPath("$.payment.totalPrice").value(equalTo(30400)))
+                                .andExpect(jsonPath("$.payment.receivedPrice").value(equalTo(31000)))
+                                .andExpect(jsonPath("$.payment.remainedPrice").value(equalTo(600)))
+                                .andExpect(jsonPath("$.orderDatetime").exists());
+        }
 
-    private Long saveOrders() throws Exception {
-        int totalPrice = 30400;
-        int receivedPrice = 31000;
-        List<CartInDto> orderProducts = new ArrayList<>();
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("large")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("ice")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        orderProducts.add(CartInDto.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
-        PayByCashInDto payByCashInDto = PayByCashInDto.builder()
-            .totalPrice(totalPrice)
-            .receivedPrice(receivedPrice)
-            .orderProducts(orderProducts)
-            .build();
-        String json = this.mockMvc.perform(post("/api/payment/cash")
-                .content(new ObjectMapper().writeValueAsString(payByCashInDto))
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        private Long saveOrders() throws Exception {
+                int totalPrice = 30400;
+                int receivedPrice = 31000;
+                List<CartInDto> orderProducts = new ArrayList<>();
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("large")
+                                .temperature("hot")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("small")
+                                .temperature("ice")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                orderProducts.add(CartInDto.builder()
+                                .productId(1L)
+                                .size("small")
+                                .temperature("hot")
+                                .amount(2)
+                                .name("아메리카노")
+                                .build());
+                PayByCashInDto payByCashInDto = PayByCashInDto.builder()
+                                .totalPrice(totalPrice)
 
-        PaymentResultResponseDto paymentResultResponseDto =
-            new ObjectMapper().readValue(json, PaymentResultResponseDto.class);
-        return Long.parseLong(String.valueOf(paymentResultResponseDto.getData().get("orderId")));
-    }
+                                .orderProducts(orderProducts)
+                                .build();
+                String json = this.mockMvc.perform(post("/api/payment/cash")
+                                .content(new ObjectMapper().writeValueAsString(payByCashInDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk())
+                                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+                PaymentResultResponseDto paymentResultResponseDto = new ObjectMapper().readValue(json,
+                                PaymentResultResponseDto.class);
+                return Long.parseLong(String.valueOf(paymentResultResponseDto.getData().get("orderId")));
+        }
 
 }

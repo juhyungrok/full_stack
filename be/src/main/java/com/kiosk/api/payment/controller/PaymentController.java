@@ -32,8 +32,7 @@ public class PaymentController {
         return handle200(orderId, "현금 결제 성공하였습니다.");
     }
 
-
-    @PostMapping("/api/payment/card")
+    @PostMapping("/api/payment/kakaopay")
     public PaymentResultResponseDto payByCard(@RequestBody final PayByCardInDto payByCardInDto, final Long fail) {
         if (Objects.equals(fail, 400L)) {
             return handle400();
@@ -46,7 +45,6 @@ public class PaymentController {
         Long orderId = paymentService.createPaymentByCard(payByCardInDto);
         return handle200(orderId, "카드 결제 성공하였습니다.");
     }
-
 
     private PaymentResultResponseDto handle200(final Long orderId, final String message) {
         Map<String, Object> data = Map.of("orderId", orderId);

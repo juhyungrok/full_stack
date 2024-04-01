@@ -12,15 +12,12 @@ import lombok.Getter;
 public class PaymentResponseDto {
 
     private int totalPrice;
-    private int receivedPrice;
-    private int remainedPrice;
+
     private PaymentMethod method;
 
     public static PaymentResponseDto from(Payment payment) {
         return PaymentResponseDto.builder()
                 .totalPrice(payment.getTotalPrice())
-                .receivedPrice(payment.getReceivedPrice())
-                .remainedPrice(payment.getRemainedPrice())
                 .method(payment.getMethod())
                 .build();
     }

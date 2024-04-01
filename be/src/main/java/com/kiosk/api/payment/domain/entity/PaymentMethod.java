@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum PaymentMethod {
 
-    @JsonProperty("card")
-    CARD,
+    @JsonProperty("kakaopay")
+    KAKAOPAY,
     @JsonProperty("cash")
     CASH;
 

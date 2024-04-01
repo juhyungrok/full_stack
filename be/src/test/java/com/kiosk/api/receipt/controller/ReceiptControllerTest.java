@@ -1,6 +1,6 @@
 package com.kiosk.api.receipt.controller;
 
-import static com.kiosk.api.payment.domain.entity.PaymentMethod.CARD;
+import static com.kiosk.api.payment.domain.entity.PaymentMethod.KAKAOPAY;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@ActiveProfiles(profiles = {"test"})
+@ActiveProfiles(profiles = { "test" })
 @WebMvcTest(ReceiptController.class)
 class ReceiptControllerTest {
 
@@ -42,47 +42,46 @@ class ReceiptControllerTest {
     public void beforeEach() {
         Long orderId = 1L;
         this.mockMvc = MockMvcBuilders.standaloneSetup(receiptController)
-            .defaultRequest(post("/api/receipt")
-                .param("orderId", String.valueOf(orderId)))
-            .alwaysExpect(status().isOk())
-            .build();
+                .defaultRequest(post("/api/receipt")
+                        .param("orderId", String.valueOf(orderId)))
+                .alwaysExpect(status().isOk())
+                .build();
 
         List<OrderProduct> orderProducts = new ArrayList<>();
         orderProducts.add(OrderProduct.builder()
-            .productId(1L)
-            .size("large")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
+                .productId(1L)
+                .size("large")
+                .temperature("hot")
+                .amount(2)
+                .name("아메리카노")
+                .build());
         orderProducts.add(OrderProduct.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("ice")
-            .amount(2)
-            .name("아메리카노")
-            .build());
+                .productId(1L)
+                .size("small")
+                .temperature("ice")
+                .amount(2)
+                .name("아메리카노")
+                .build());
         orderProducts.add(OrderProduct.builder()
-            .productId(1L)
-            .size("small")
-            .temperature("hot")
-            .amount(2)
-            .name("아메리카노")
-            .build());
+                .productId(1L)
+                .size("small")
+                .temperature("hot")
+                .amount(2)
+                .name("아메리카노")
+                .build());
         Payment payment = Payment.builder()
-            .paymentId(1L)
-            .orderId(orderId)
-            .totalPrice(10000)
-            .receivedPrice(10000)
-            .remainedPrice(0)
-            .method(CARD)
-            .build();
+                .paymentId(1L)
+                .orderId(orderId)
+                .totalPrice(10000)
+
+                .method(KAKAOPAY)
+                .build();
 
         Orders orders = Orders.builder()
-            .orderId(orderId)
-            .orderNumber(1L)
-            .orderDatetime("2023-06-21 12:00:00")
-            .build();
+                .orderId(orderId)
+                .orderNumber(1L)
+                .orderDatetime("2023-06-21 12:00:00")
+                .build();
 
         Receipt receipt = new Receipt(orders, orderProducts, payment);
         Mockito.when(receiptService.getReceiptInformation(orderId)).thenReturn(receipt);
@@ -93,14 +92,13 @@ class ReceiptControllerTest {
     public void receipt() throws Exception {
         // when, then
         this.mockMvc.perform(get("/api/receipt"))
-            .andDo(print())
-            .andExpect(jsonPath("$.orders.orderId").value(equalTo(1)))
-            .andExpect(jsonPath("$.orders.orderNumber").value(equalTo(1)))
-            .andExpect(jsonPath("$.orders.orderDatetime").value(equalTo("2023-06-21 12:00:00")))
-            .andExpect(jsonPath("$.orderProducts").exists())
-            .andExpect(jsonPath("$.payment.method").value(equalTo("card")))
-            .andExpect(jsonPath("$.payment.totalPrice").value(equalTo(10000)))
-            .andExpect(jsonPath("$.payment.remainedPrice").value(equalTo(0)))
-            .andExpect(jsonPath("$.payment.receivedPrice").value(equalTo(10000)));
+                .andDo(print())
+                .andExpect(jsonPath("$.orders.orderId").value(equalTo(1)))
+                .andExpect(jsonPath("$.orders.orderNumber").value(equalTo(1)))
+                .andExpect(jsonPath("$.orders.orderDatetime").value(equalTo("2023-06-21 12:00:00")))
+                .andExpect(jsonPath("$.orderProducts").exists())
+                .andExpect(jsonPath("$.payment.method").value(equalTo("card")))
+                .andExpect(jsonPath("$.payment.totalPrice").value(equalTo(10000)));
+
     }
 }
