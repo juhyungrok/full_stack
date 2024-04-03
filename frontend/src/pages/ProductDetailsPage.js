@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getProducts } from "../api";
 import DetailHeader from "../components/menu/DetailHeader";
 import QuantityButton from "../components/button/QuantityButton";
-import AddToCartButton from "../components/button/AddToCartButton";
+import AddToCartButton from "../components/button/AddtoCartButton";
 
 import styled from "styled-components";
 import TemperatureButton from "../components/button/TemperatureButton";

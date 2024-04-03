@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import styled from "styled-components";
-import CartToAddModal from "../modal/CartToAddModal";
+import CartToAddModal from "../modal/cartToaddmodal";
 
 const Button = styled.button`
   font-size: 16px;
