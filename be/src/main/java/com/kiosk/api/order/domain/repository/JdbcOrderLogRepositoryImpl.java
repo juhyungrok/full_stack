@@ -3,6 +3,8 @@ package com.kiosk.api.order.domain.repository;
 import com.kiosk.api.order.domain.entity.OrderLog;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import retrofit2.http.OPTIONS;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -34,20 +36,20 @@ public class JdbcOrderLogRepositoryImpl implements OrderLogRepository {
 
     private Long[] save(OrderLog orderLog) {
         String sql = "INSERT INTO order_log (sales_date, category_id, product_id, sales_amount) " // amount로 db 수정
-            + "values (:salesDate, :categoryId, :productId, :salesAmount)";
+                + "values (:salesDate, :categoryId, :productId, :salesAmount)";
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(orderLog);
 
         template.update(sql, param);
 
-        return new Long[]{orderLog.getProductId(), orderLog.getSalesAmount()};
+        return new Long[] { orderLog.getProductId(), orderLog.getSalesAmount() };
     }
 
     @Override
     public List<OrderLog> findAllByDate(final LocalDate date) {
         String sql = "SELECT product_id, category_id, sales_amount, sales_date " +
-            "FROM order_log " +
-            "WHERE DATE(sales_date) = STR_TO_DATE(:date, '%Y-%m-%d')";
+                "FROM order_log " +
+                "WHERE DATE(sales_date) = STR_TO_DATE(:date, '%Y-%m-%d')";
 
         SqlParameterSource param = new MapSqlParameterSource("date", date.toString());
 
@@ -56,12 +58,11 @@ public class JdbcOrderLogRepositoryImpl implements OrderLogRepository {
 
     private RowMapper<OrderLog> rowMapper() {
         return (rs, rowNum) -> OrderLog.builder()
-            .productId(rs.getLong("product_id"))
-            .categoryId(rs.getLong("category_id"))
-            .salesAmount(rs.getLong("sales_amount"))
-            .salesDate(rs.getDate("sales_date").toString())
-            .build();
+                .productId(rs.getLong("product_id"))
+                .categoryId(rs.getLong("category_id"))
+                .salesAmount(rs.getLong("sales_amount"))
+                .salesDate(rs.getDate("sales_date").toString())
+                .build();
     }
 
 }
-

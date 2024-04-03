@@ -9,7 +9,6 @@ public class OrderProduct {
     private Long orderProductId;
     private Long orderId;
     private Long productId;
-
     private String name;
     private Integer amount;
     private String size;

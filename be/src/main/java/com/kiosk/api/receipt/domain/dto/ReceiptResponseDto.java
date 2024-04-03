@@ -23,14 +23,14 @@ public class ReceiptResponseDto {
 
     public static ReceiptResponseDto from(Receipt receipt) {
         List<OrderProductResponseDto> orderProducts = receipt.getOrderProducts().stream()
-            .map(OrderProductResponseDto::from)
-            .collect(Collectors.toList());
+                .map(OrderProductResponseDto::from)
+                .collect(Collectors.toList());
         PaymentResponseDto payment = PaymentResponseDto.from(receipt.getPayment());
         OrdersResponseDto orders = OrdersResponseDto.from(receipt.getOrders());
         return ReceiptResponseDto.builder()
-            .orders(orders)
-            .orderProducts(orderProducts)
-            .payment(payment)
-            .build();
+                .orders(orders)
+                .orderProducts(orderProducts)
+                .payment(payment)
+                .build();
     }
 }

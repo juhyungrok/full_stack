@@ -10,6 +10,7 @@ import com.kiosk.api.receipt.domain.entity.Receipt;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -26,4 +27,7 @@ public class ReceiptService {
         return new Receipt(orders, products, payment);
     }
 
+    public List<Orders> getAllOrders() {
+        return ordersRepository.findAll();
+    }
 }

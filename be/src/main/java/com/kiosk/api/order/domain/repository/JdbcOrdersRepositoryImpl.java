@@ -3,6 +3,7 @@ package com.kiosk.api.order.domain.repository;
 import com.kiosk.api.order.domain.entity.Orders;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -71,7 +72,12 @@ public class JdbcOrdersRepositoryImpl implements OrdersRepository {
         return (rs, rowNum) -> new Orders(
                 rs.getLong("order_id"),
                 rs.getLong("order_number"),
-                rs.getString("order_datetime")
-        );
+                rs.getString("order_datetime"));
+    }
+
+    @Override
+    public List<Orders> findAll() {
+        String sql = "SELECT order_id, order_number, order_datetime FROM orders";
+        return template.query(sql, rowMapper());
     }
 }
