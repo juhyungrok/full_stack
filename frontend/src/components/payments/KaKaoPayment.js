@@ -40,7 +40,7 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
       async (rsp) => {
         try {
           const { data } = await axios.post(
-            "http://192.168.0.20:8080/verifyIamport/" + rsp.imp_uid
+            "http://localhost:8080/verifyIamport/" + rsp.imp_uid
           );
           console.log("error data : ", data);
           if (rsp.paid_amount === data.response.amount) {

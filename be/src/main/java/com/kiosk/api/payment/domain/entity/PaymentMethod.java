@@ -6,8 +6,8 @@ public enum PaymentMethod {
 
     @JsonProperty("kakaopay")
     KAKAOPAY,
-    @JsonProperty("cash")
-    CASH;
+    @JsonProperty("tosspay")
+    TOSSPAY;
 
     public static PaymentMethod from(String value) {
         for (PaymentMethod paymentMethod : values()) {
@@ -16,6 +16,6 @@ public enum PaymentMethod {
             }
         }
 
-        throw new RuntimeException("CARD, CASH 중 어느 값도 찾을 수 없습니다. value: " + value);
+        throw new RuntimeException("KAKAO, TOSS 중 어느 값도 찾을 수 없습니다. value: " + value);
     }
 }

@@ -10,8 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kiosk.api.order.domain.repository.OrderProductRepository;
 import com.kiosk.api.payment.domain.dto.PaymentRequestDto.CartInDto;
-import com.kiosk.api.payment.domain.dto.PaymentRequestDto.PayByCardInDto;
-import com.kiosk.api.payment.domain.dto.PaymentRequestDto.PayByCashInDto;
+import com.kiosk.api.payment.domain.dto.PaymentRequestDto.KakaoPayByCardInDto;
+import com.kiosk.api.payment.domain.dto.PaymentRequestDto.TOSSPayByCardInDto;
 import com.kiosk.api.payment.domain.repository.PaymentRepository;
 import com.kiosk.api.payment.service.PaymentService;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ class PaymentControllerTest {
                                         .amount(2)
                                         .name("아메리카노")
                                         .build());
-                        PayByCardInDto payByCardInDto = PayByCardInDto.builder()
+                        KakaoPayByCardInDto payByCardInDto = KakaoPayByCardInDto.builder()
                                         .totalPrice(totalPrice)
                                         .orderProducts(orderProducts)
                                         .build();
@@ -145,48 +145,6 @@ class PaymentControllerTest {
 
                 @MockBean
                 private PaymentService paymentService;
-
-                @BeforeEach
-                public void beforeEach() throws JsonProcessingException {
-                        int totalPrice = 10000;
-                        int receivedPrice = 10000;
-                        List<CartInDto> orderProducts = new ArrayList<>();
-                        orderProducts.add(CartInDto.builder()
-                                        .productId(1L)
-                                        .size("large")
-                                        .temperature("hot")
-                                        .amount(2)
-                                        .name("아메리카노")
-                                        .build());
-                        orderProducts.add(CartInDto.builder()
-                                        .productId(1L)
-                                        .size("small")
-                                        .temperature("ice")
-                                        .amount(2)
-                                        .name("아메리카노")
-                                        .build());
-                        orderProducts.add(CartInDto.builder()
-                                        .productId(1L)
-                                        .size("small")
-                                        .temperature("hot")
-                                        .amount(2)
-                                        .name("아메리카노")
-                                        .build());
-                        PayByCashInDto payByCashInDto = PayByCashInDto.builder()
-                                        .totalPrice(totalPrice)
-
-                                        .orderProducts(orderProducts)
-                                        .build();
-
-                        this.mockMvc = MockMvcBuilders.standaloneSetup(paymentController)
-                                        .defaultRequest(post("/api/payment/cash")
-                                                        .content(new ObjectMapper().writeValueAsString(payByCashInDto))
-                                                        .contentType(APPLICATION_JSON))
-                                        .alwaysExpect(status().isOk())
-                                        .build();
-
-                        Mockito.when(paymentService.createPaymentByCash(payByCashInDto)).thenReturn(1L);
-                }
 
                 @Test
                 @DisplayName("현금 결제 정보가 주어지고 결제를 요청할때 결제 정보가 저장된다.")

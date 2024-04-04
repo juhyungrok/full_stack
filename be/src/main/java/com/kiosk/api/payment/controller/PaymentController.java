@@ -1,7 +1,8 @@
 package com.kiosk.api.payment.controller;
 
-import com.kiosk.api.payment.domain.dto.PaymentRequestDto.PayByCardInDto;
-import com.kiosk.api.payment.domain.dto.PaymentRequestDto.PayByCashInDto;
+import com.kiosk.api.payment.domain.dto.PaymentRequestDto.KakaoPayByCardInDto;
+
+import com.kiosk.api.payment.domain.dto.PaymentRequestDto.TOSSPayByCardInDto;
 import com.kiosk.api.payment.domain.dto.PaymentResultResponseDto;
 import com.kiosk.api.payment.service.PaymentService;
 import java.util.HashMap;
@@ -18,8 +19,9 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/api/payment/cash")
-    public PaymentResultResponseDto payByCash(@RequestBody final PayByCashInDto payByCashInDto, final Long fail) {
+    @PostMapping("/api/payment/tosspay")
+    public PaymentResultResponseDto payByCash(@RequestBody final TOSSPayByCardInDto tossPayByCardInDto,
+            final Long fail) {
         if (Objects.equals(fail, 400L)) {
             return handle400();
         }
@@ -28,12 +30,12 @@ public class PaymentController {
             return handle500();
         }
 
-        Long orderId = paymentService.createPaymentByCash(payByCashInDto);
-        return handle200(orderId, "현금 결제 성공하였습니다.");
+        Long orderId = paymentService.createPaymentByCaedToss(tossPayByCardInDto);
+        return handle200(orderId, "토스 결제 성공하였습니다.");
     }
 
     @PostMapping("/api/payment/kakaopay")
-    public PaymentResultResponseDto payByCard(@RequestBody final PayByCardInDto payByCardInDto, final Long fail) {
+    public PaymentResultResponseDto payByCard(@RequestBody final KakaoPayByCardInDto payByCardInDto, final Long fail) {
         if (Objects.equals(fail, 400L)) {
             return handle400();
         }
@@ -42,8 +44,8 @@ public class PaymentController {
             return handle500();
         }
 
-        Long orderId = paymentService.createPaymentByCard(payByCardInDto);
-        return handle200(orderId, "카드 결제 성공하였습니다.");
+        Long orderId = paymentService.createPaymentByCardKaKao(payByCardInDto);
+        return handle200(orderId, "카카오 결제 성공하였습니다.");
     }
 
     private PaymentResultResponseDto handle200(final Long orderId, final String message) {

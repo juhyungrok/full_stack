@@ -1,7 +1,7 @@
 package com.kiosk.api.payment.domain.dto;
 
 import static com.kiosk.api.payment.domain.entity.PaymentMethod.KAKAOPAY;
-import static com.kiosk.api.payment.domain.entity.PaymentMethod.CASH;
+import static com.kiosk.api.payment.domain.entity.PaymentMethod.TOSSPAY;
 
 import com.kiosk.api.order.domain.entity.OrderProduct;
 import com.kiosk.api.payment.domain.entity.Payment;
@@ -20,7 +20,7 @@ public class PaymentRequestDto {
     @AllArgsConstructor
     @Getter
     @Setter
-    public static class PayByCashInDto {
+    public static class TOSSPayByCardInDto {
 
         @NonNull
         private List<CartInDto> orderProducts;
@@ -31,7 +31,7 @@ public class PaymentRequestDto {
             return Payment.builder()
                     .orderId(orderId)
                     .totalPrice(this.totalPrice)
-                    .method(CASH)
+                    .method(TOSSPAY)
                     .build();
         }
     }
@@ -41,7 +41,7 @@ public class PaymentRequestDto {
     @AllArgsConstructor
     @Getter
     @Setter
-    public static class PayByCardInDto {
+    public static class KakaoPayByCardInDto {
 
         private List<CartInDto> orderProducts;
         private Integer totalPrice;
