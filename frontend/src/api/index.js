@@ -29,5 +29,13 @@ export const postPayment = async ({ orderProducts, totalPrice }) => {
     throw error;
   }
 };
-
+export const fetchReceipt = async (orderId) => {
+  try {
+    const response = await api.get(`/api/receipt?orderId=${orderId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching receipt:", error);
+    throw error;
+  }
+};
 export default api;
