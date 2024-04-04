@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import handlePayment from "../button/PaymentButton";
+import handlePayment from "../../hooks/handlePayment";
+import { useNavigate } from "react-router-dom";
 
 const KaKaoPayment = ({ cartItems, totalPrice }) => {
+  const navigate = useNavigate();
+  const [orderId, setOrderId] = useState(null);
+
   useEffect(() => {
     const jquery = document.createElement("script");
     jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
@@ -11,9 +14,7 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
     iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
-    // iamport.onload = () => {
-    //   requestPay();
-    // };
+
     return () => {
       document.head.removeChild(jquery);
       document.head.removeChild(iamport);
@@ -42,10 +43,26 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
           const { data } = await axios.post(
             "http://localhost:8080/verifyIamport/" + rsp.imp_uid
           );
-          console.log("error data : ", data);
+
           if (rsp.paid_amount === data.response.amount) {
             alert("결제 성공");
-            handlePayment({ cartItems, totalPrice }); //결제 성공시 로직
+            try {
+              const paymentResult = await handlePayment({
+                cartItems,
+                totalPrice,
+              });
+              if (paymentResult.success) {
+                console.log("orderId:", paymentResult.data.orderId);
+                navigate("/success", {
+                  state: { orderId: paymentResult.data.orderId },
+                });
+              } else {
+                throw new Error("결제 처리 중 오류 발생");
+              }
+            } catch (error) {
+              console.error("결제 처리 중 오류 발생:", error);
+              alert("결제 처리 중 오류 발생");
+            }
           } else {
             alert("결제 실패");
           }
@@ -56,10 +73,9 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
       }
     );
   };
-
   return (
     <div>
-      <button onClick={requestPay}>결제하기</button>
+      <button onClick={requestPay}>카카오페이</button>
     </div>
   );
 };

@@ -6,7 +6,8 @@ const Loading = <div>Loading....</div>;
 const Category = lazy(() => import("../pages/categories/CategoryPage.js"));
 const ProductDetail = lazy(() => import("../pages/ProductDetailsPage.js"));
 const Cart = lazy(() => import("../pages/cart/CartPage.js"));
-const Pay = lazy(() => import("../pages/payment/PaymentPage.js"));
+const Order = lazy(() => import("../pages/order/OrderPage.js"));
+
 const root = createBrowserRouter([
   {
     path: "",
@@ -41,10 +42,10 @@ const root = createBrowserRouter([
     ),
   },
   {
-    path: "/pay",
+    path: "/success",
     element: (
       <Suspense fallback={Loading}>
-        <Pay />
+        <Order />
       </Suspense>
     ),
   },
