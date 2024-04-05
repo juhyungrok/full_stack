@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProducts } from "../../api";
 
 import Layout from "../../components/layout/Layout";
-import * as styled from "../../components/style/Layout"; // MainPage와 동일한 스타일 import
+import * as styled from "../../components/layout/LayoutStyles"; // MainPage와 동일한 스타일 import
 
 const CategoryPage = () => {
   const { id } = useParams();

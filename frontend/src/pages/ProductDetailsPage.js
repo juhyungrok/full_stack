@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProducts } from "../api";
 import DetailHeader from "../components/menu/DetailHeader";
-import QuantityButton from "../components/button/QuantityButton";
-import AddToCartButton from "../components/button/AddtoCartButton";
+import QuantityButton from "../components/button/QuantityButton";
 
 import styled from "styled-components";
 import TemperatureButton from "../components/button/TemperatureButton";
 import SizeButton from "../components/button/SizeButton";
 import OrderInfoModule from "../components/menu/OrderInfoModule";
+import AddToCartButton from "../components/button/AddtoCartButton";
 
 const ProductContainer = styled.div`
   display: flex;

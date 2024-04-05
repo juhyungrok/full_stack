@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import { getProducts } from "../api";
-import * as styled from "../components/style/Layout";
+import * as styled from "../components/layout/LayoutStyles";
 
 const MainPage = () => {
   const [bestProducts, setBestProducts] = useState([]);
