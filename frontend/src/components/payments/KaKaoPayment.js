@@ -30,8 +30,8 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
         pg: "kakaopay.TC0ONETIME", // 카카오페이 사용 시에는 'kakaopay'로 설정
         pay_method: "card",
         merchant_uid: new Date().getTime().toString(), // 고유한 주문번호를 지정
-        name: "테스트 상품",
-        amount: 1004,
+        name: "키오스크",
+        amount: totalPrice,
         // buyer_email: "test@naver.com",
         // buyer_name: "코드쿡",
         // buyer_tel: "010-1234-5678",

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import handlePayment from "../button/PaymentButton";
+import handlePayment from "../../hooks/handlePayment";
+import { useNavigate } from "react-router-dom";
 
 const TossPayment = ({ cartItems, totalPrice }) => {
-  const [orderId, setOrderId] = useState(null); // orderId 상태 추가
+  const navigate = useNavigate();
 
   useEffect(() => {
     const jquery = document.createElement("script");
@@ -12,6 +13,7 @@ const TossPayment = ({ cartItems, totalPrice }) => {
     iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
+
     return () => {
       document.head.removeChild(jquery);
       document.head.removeChild(iamport);
@@ -19,44 +21,53 @@ const TossPayment = ({ cartItems, totalPrice }) => {
   }, []);
 
   const requestPay = async () => {
-    const { IMP } = window;
+    const IMP = window.IMP;
     IMP.init("imp01477361");
 
     IMP.request_pay(
       {
-        pg: "toss.tosstest",
-        pay_method: "card",
+        pg: "tosspay.tosstest",
+        pay_method: "tosspay",
         merchant_uid: new Date().getTime().toString(),
         name: "키오스크",
         amount: totalPrice,
+        successUrl: "http://localhost:8080/success",
+        close: true, // 결제가 완료되면 자동으로 창을 닫음
       },
       async (rsp) => {
+        // 콜백 함수 시작
         try {
+          console.log(rsp); // rsp 값을 콘솔에 출력하여 확인
           const { data } = await axios.post(
             "http://localhost:8080/verifyIamport/" + rsp.imp_uid
           );
-          if (rsp.paid_amount === data.response.amount) {
-            const result = await handlePayment({ cartItems, totalPrice });
-            if (result.success) {
-              setOrderId(result.data.orderId); // orderId 설정
-              alert("결제 성공");
+          if (rsp.success) {
+            // rsp.success를 이용하여 결제 성공 여부 확인
+            const paymentResult = await handlePayment({
+              cartItems,
+              totalPrice,
+            });
+            alert("결제 성공");
+            if (paymentResult.success) {
+              console.log("orderId:", paymentResult.data.orderId);
+              navigate("/success", {
+                state: { orderId: paymentResult.data.orderId },
+              });
             } else {
-              alert("결제 실패1");
+              throw new Error("결제 처리 중 오류 발생");
             }
           } else {
-            alert("결제 실패2");
+            alert("결제 실패");
           }
         } catch (error) {
-          console.error("결제 검증 중 에러 발생:", error);
-          alert("결제 실패3");
+          console.error("결제 처리 중 에러 발생:", error);
+          alert("결제 처리 중 오류 발생");
         }
       }
     );
   };
-
   return (
     <div>
-      {orderId && <p>주문 ID: {orderId}</p>}
       <button onClick={requestPay}>토스페이</button>
     </div>
   );

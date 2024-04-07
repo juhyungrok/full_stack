@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import KaKaoPayment from "../payments/KaKaoPayment";
-
+import TossPayment from "../payments/TossPayment";
 const ModalBackdrop = styled.div`
   position: fixed;
   top: 0;
@@ -68,6 +68,7 @@ const SelectedCardModal = ({ show, handleClose, cartItems, totalPrice }) => {
         <ModalBackdrop>
           <ModalContent>
             <KaKaoPayment cartItems={cartItems} totalPrice={totalPrice} />
+            <TossPayment cartItems={cartItems} totalPrice={totalPrice} />
             <SmallCloseButton onClick={handleClose}>닫기</SmallCloseButton>
           </ModalContent>
         </ModalBackdrop>
