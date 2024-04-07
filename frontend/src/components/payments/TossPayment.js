@@ -27,12 +27,12 @@ const TossPayment = ({ cartItems, totalPrice }) => {
     IMP.request_pay(
       {
         pg: "tosspay.tosstest",
-        pay_method: "tosspay",
+        pay_method: "card",
         merchant_uid: new Date().getTime().toString(),
         name: "키오스크",
         amount: totalPrice,
-        successUrl: "http://localhost:8080/success",
-        close: true, // 결제가 완료되면 자동으로 창을 닫음
+        // successUrl: "http://localhost:8080/success",
+        // close: true, // 결제가 완료되면 자동으로 창을 닫음
       },
       async (rsp) => {
         // 콜백 함수 시작

@@ -1,12 +1,15 @@
-import { Suspense, lazy } from "react";
+// root.js
+import React, { Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 const Mainpage = lazy(() => import("../pages/MainPage"));
-const Loading = <div>Loading....</div>;
 const Category = lazy(() => import("../pages/categories/CategoryPage.js"));
 const ProductDetail = lazy(() => import("../pages/ProductDetailsPage.js"));
 const Cart = lazy(() => import("../pages/cart/CartPage.js"));
 const Order = lazy(() => import("../pages/order/OrderPage.js"));
+const Success = lazy(() => import("../pages/order/OrderPage.js"));
+
+const Loading = <div>Loading....</div>;
 
 const root = createBrowserRouter([
   {
@@ -45,9 +48,10 @@ const root = createBrowserRouter([
     path: "/success",
     element: (
       <Suspense fallback={Loading}>
-        <Order />
+        <Success />
       </Suspense>
     ),
   },
 ]);
+
 export default root;
