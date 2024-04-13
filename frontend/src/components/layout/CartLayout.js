@@ -1,4 +1,3 @@
-// CartLayout.js 파일
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../cart/Header";
@@ -6,6 +5,7 @@ import Footer from "../cart/Footer";
 import CartComponent from "../cart/CartComponent";
 
 import SelectedCardModal from "../modal/SeletedCardModal";
+import { CheckoutPage } from "../../toss/CheckoutPage";
 // import handlePayment from "../button/PaymentButton.js";
 
 const Layout = styled.div`
@@ -19,6 +19,7 @@ const MobileLayout = styled(Layout)`
   @media (max-width: 768px) {
     padding-top: 60px;
     padding-bottom: 60px;
+    height: 100vh;
   }
 `;
 
@@ -31,7 +32,7 @@ const CartContent = styled.div`
 const CartLayout = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [showModal, setShowModal] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -53,9 +54,14 @@ const CartLayout = () => {
     calculateTotalPrice(updatedCart);
   };
 
-  const handlePaymentClick = () => {
-    // 결제 정보를 필요한 형식으로 가공하여 handlePayment 함수 호출
-    setShowModal(true);
+  const handleCheckout = () => {
+    setShowCheckout(true);
+  };
+
+  const handleCartContentClick = () => {
+    if (showCheckout) {
+      setShowCheckout(false);
+    }
   };
 
   return (
@@ -72,13 +78,21 @@ const CartLayout = () => {
             <p>총 가격: {totalPrice.toLocaleString()}원</p>
           )}
         </div>
-        <button onClick={handlePaymentClick}>결제하기</button>
-        <SelectedCardModal
+
+        {showCheckout ? (
+          <button onClick={() => setShowCheckout(false)}>닫기</button>
+        ) : (
+          <button onClick={handleCheckout}>결제하기</button>
+        )}
+        {showCheckout && (
+          <CheckoutPage cartItems={cartItems} totalPrice={totalPrice} />
+        )}
+        {/* <SelectedCardModal
           show={showModal}
           handleClose={() => setShowModal(false)}
           cartItems={cartItems}
           totalPrice={totalPrice}
-        />
+        /> */}
       </Footer>
     </MobileLayout>
   );

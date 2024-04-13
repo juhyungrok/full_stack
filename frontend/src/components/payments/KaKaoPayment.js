@@ -11,7 +11,7 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
     const jquery = document.createElement("script");
     jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
     const iamport = document.createElement("script");
-    iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
+    iamport.src = "https://cdn.iamport.kr/v1/iamport.js";
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
 
@@ -32,7 +32,8 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
         merchant_uid: new Date().getTime().toString(), // 고유한 주문번호를 지정
         name: "키오스크",
         amount: totalPrice,
-        // m_redirect_url: "http://localhost:3000/success",
+        m_redirect_url: "http://localhost:3000/success",
+
         // buyer_email: "test@naver.com",
         // buyer_name: "코드쿡",
         // buyer_tel: "010-1234-5678",
@@ -40,12 +41,11 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
         // buyer_postcode: "123-456",
       },
       async (rsp) => {
+        console.log(rsp);
         try {
-          const { data } = await axios.post(
-            "http://localhost:8080/verifyIamport/" + rsp.imp_uid
-          );
+          // const { data } = await axios.post("/verifyIamport/" + rsp.imp_uid);
 
-          if (rsp.paid_amount === data.response.amount) {
+          if (rsp.success) {
             alert("결제 성공");
             try {
               const paymentResult = await handlePayment({
@@ -65,11 +65,11 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
               alert("결제 처리 중 오류 발생");
             }
           } else {
-            alert("결제 실패");
+            alert("결제 실패1");
           }
         } catch (error) {
           console.error("결제 검증 중 에러 발생:", error);
-          alert("결제 실패");
+          alert("결제 실패2");
         }
       }
     );

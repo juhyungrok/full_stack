@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import KaKaoPayment from "../payments/KaKaoPayment";
 import TossPayment from "../payments/TossPayment";
+
 const ModalBackdrop = styled.div`
   position: fixed;
   top: 0;
@@ -22,6 +23,8 @@ const ModalContent = styled.div`
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   position: relative;
   text-align: center; /* 모달 창 내용 가운데 정렬 */
+  width: 400px; /* 너비 설정 */
+  height: 300px; /* 높이 설정 */
 `;
 
 // const CloseButton = styled.button`
@@ -67,8 +70,9 @@ const SelectedCardModal = ({ show, handleClose, cartItems, totalPrice }) => {
       {show && (
         <ModalBackdrop>
           <ModalContent>
-            <KaKaoPayment cartItems={cartItems} totalPrice={totalPrice} />
-            <TossPayment cartItems={cartItems} totalPrice={totalPrice} />
+            {/* <KaKaoPayment cartItems={cartItems} totalPrice={totalPrice} />
+            <TossPayment cartItems={cartItems} totalPrice={totalPrice} /> */}
+
             <SmallCloseButton onClick={handleClose}>닫기</SmallCloseButton>
           </ModalContent>
         </ModalBackdrop>

@@ -10,7 +10,7 @@ const TossPayment = ({ cartItems, totalPrice }) => {
     const jquery = document.createElement("script");
     jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
     const iamport = document.createElement("script");
-    iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
+    iamport.src = "https://cdn.iamport.kr/v1/iamport.js";
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
 
@@ -31,16 +31,17 @@ const TossPayment = ({ cartItems, totalPrice }) => {
         merchant_uid: new Date().getTime().toString(),
         name: "키오스크",
         amount: totalPrice,
-        // successUrl: "http://localhost:8080/success",
+        m_redirect_url: "http://localhost:3000/success",
         // close: true, // 결제가 완료되면 자동으로 창을 닫음
       },
       async (rsp) => {
+        console.log(rsp);
         // 콜백 함수 시작
         try {
           console.log(rsp); // rsp 값을 콘솔에 출력하여 확인
-          const { data } = await axios.post(
-            "http://localhost:8080/verifyIamport/" + rsp.imp_uid
-          );
+          // const { data } = await axios.post(
+          //   "http://localhost:8080/verifyIamport/" + rsp.imp_uid
+          // );
           if (rsp.success) {
             // rsp.success를 이용하여 결제 성공 여부 확인
             const paymentResult = await handlePayment({

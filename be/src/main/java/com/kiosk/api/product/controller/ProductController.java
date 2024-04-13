@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProductController {
 
     private final ProductService productService;
@@ -26,11 +29,11 @@ public class ProductController {
         List<Category> categories = categoryService.findAll(); // 카테고리 정보들
         for (Category category : categories) {
             List<ProductDto> productByCategory = products.stream()
-                .filter(product -> product.matchCategoryId(category))
-                .collect(Collectors.toUnmodifiableList());
+                    .filter(product -> product.matchCategoryId(category))
+                    .collect(Collectors.toUnmodifiableList());
             responses.add(new ProductCategoryResponse(category.getCategoryType().name(),
-                category.getId(),
-                productByCategory));
+                    category.getId(),
+                    productByCategory));
         }
         return responses;
     }
