@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import handlePayment from "../hooks/handlePayment";
+import KaKaoPayment from "../components/payments/KaKaoPayment";
 
 const selector = "#payment-widget";
 const clientKey = "test_ck_EP59LybZ8BLlbDDYvoDQV6GYo7pR";
@@ -10,7 +11,7 @@ const customerKey = "YbX2HuSlsC9uVJW6NMRMj";
 export function CheckoutPage({ cartItems, totalPrice }) {
   const paymentWidgetRef = useRef(null);
   const paymentMethodsWidgetRef = useRef(null);
-  const [price, setPrice] = useState(50_000);
+  const [price, setPrice] = useState(totalPrice);
 
   useEffect(() => {
     (async () => {
@@ -18,8 +19,8 @@ export function CheckoutPage({ cartItems, totalPrice }) {
 
       const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
         selector,
-        { value: price },
-        { variantKey: "DEFAULT" }
+        { value: totalPrice },
+        { variantKey: "BRANDPAY" }
       );
 
       paymentWidgetRef.current = paymentWidget;
@@ -53,6 +54,8 @@ export function CheckoutPage({ cartItems, totalPrice }) {
         </label>
       </div>
       <div id="payment-widget" />
+      <KaKaoPayment cartItems={cartItems} totalPrice={totalPrice} />
+
       <button
         onClick={async () => {
           const paymentWidget = paymentWidgetRef.current;

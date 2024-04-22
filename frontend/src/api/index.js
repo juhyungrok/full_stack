@@ -15,10 +15,10 @@ export const getProducts = async () => {
   }
 };
 
-export const postPayment = async ({ orderProducts, totalPrice }) => {
+export const postPayment = async ({ cartItems, totalPrice }) => {
   try {
     const paymentData = {
-      orderProducts: orderProducts,
+      orderProducts: cartItems,
       totalPrice: totalPrice,
     };
 
@@ -35,6 +35,26 @@ export const fetchReceipt = async (orderId) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching receipt:", error);
+    throw error;
+  }
+};
+// postPayment 함수가 성공적으로 실행되면 fetchReceipt를 호출하는 함수
+export const handlePostPaymentAndFetchReceipt = async ({
+  cartItems,
+  totalPrice,
+}) => {
+  try {
+    const paymentResult = await postPayment({ cartItems, totalPrice });
+    if (paymentResult.success) {
+      // localStorage.removeItem("cart"); // 결제 후 장바구니 비우기
+      const orderId = paymentResult.data.orderId;
+      const receiptData = await fetchReceipt(orderId);
+      return receiptData;
+    } else {
+      throw new Error("결제 처리 중 오류가 발생했습니다.");
+    }
+  } catch (error) {
+    console.error("결제 및 영수증 조회 중 오류가 발생했습니다:", error);
     throw error;
   }
 };

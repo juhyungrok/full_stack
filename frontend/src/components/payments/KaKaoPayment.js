@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import handlePayment from "../../hooks/handlePayment";
 import { useNavigate } from "react-router-dom";
+import kakaoimg from "./KaKaoimg.png";
+import styled from "styled-components";
+
+// styled-components를 사용하여 스타일을 적용한 컴포넌트 생성
+const KaKaoPaymentContainer = styled.div`
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+`;
 
 const KaKaoPayment = ({ cartItems, totalPrice }) => {
   const navigate = useNavigate();
@@ -75,9 +84,9 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
     );
   };
   return (
-    <div>
-      <button onClick={requestPay}>카카오페이</button>
-    </div>
+    <KaKaoPaymentContainer onClick={requestPay}>
+      <img src={kakaoimg} alt="카카오페이" />
+    </KaKaoPaymentContainer>
   );
 };
 
