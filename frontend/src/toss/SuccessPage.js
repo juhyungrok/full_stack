@@ -14,6 +14,11 @@ export function SuccessPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!searchParams.get("amount") && !searchParams.get("paymentType")) {
+          alert("잘못된 경로입니다.");
+          window.location.href = "/";
+          return;
+        }
         const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
         if (cartItems.length === 0) {
           alert("영수증 에러! 장바구니에 상품이 없습니다.");
@@ -62,6 +67,7 @@ export function SuccessPage() {
       setReceiptData(receipt);
     } catch (error) {
       console.error("Error fetching receipt:", error);
+
       setError(error);
     }
   };
@@ -70,7 +76,7 @@ export function SuccessPage() {
     <div className="success-page">
       <div className="content">
         <div className="icon-container">
-          <i className="fas fa-check-circle"></i>
+          <il className="far fa-check-circle"></il>
         </div>
         <h1>결제가 성공적으로 완료되었습니다!</h1>
         <div className="details">
@@ -97,10 +103,13 @@ export function SuccessPage() {
         {receiptData && receiptData.orders && (
           <div className="receipt">
             <h2>영수증</h2>
+            <p>=============================</p>
             <p>주문 번호: {receiptData.orders.orderId}</p>
+
             <p>결제 금액: {receiptData.payment.totalPrice}원</p>
             <p>결제 수단: {receiptData.payment.method}</p>
             <p>주문 날짜: {receiptData.orders.orderDatetime}</p>
+            <p>=============================</p>
             <p>주문 상품 목록:</p>
             <div className="product-list">
               {receiptData.orderProducts.map((item, index) => (

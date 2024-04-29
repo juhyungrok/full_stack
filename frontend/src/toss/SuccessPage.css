@@ -1,0 +1,163 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css");
+
+.success-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.icon-container {
+  margin-bottom: 20px;
+}
+
+.icon-container il {
+  font-size: 100px;
+  color: #63e6be;
+}
+
+h1 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.details {
+  margin-bottom: 30px;
+}
+
+.details p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.buttons {
+  margin-bottom: 30px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.btn i {
+  margin-right: 5px;
+}
+
+.btn-home {
+  margin-right: 10px;
+}
+
+.btn-receipt {
+  background-color: #17a2b8;
+}
+
+.btn-receipt:hover {
+  background-color: #138496;
+}
+
+.receipt {
+  text-align: left;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.receipt h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.receipt h3 {
+  font-size: 20px;
+  color: #333;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.receipt p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.receipt ul {
+  margin-bottom: 10px;
+}
+
+.receipt li {
+  font-size: 16px;
+  color: #555;
+}
+.receipt {
+  text-align: left;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.receipt h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.receipt p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.product-list {
+  margin-top: 20px;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.product-icon {
+  font-size: 24px;
+  color: #28a745;
+  margin-right: 10px;
+}
+
+.product-details {
+  flex: 1;
+}
+
+.product-name {
+  font-size: 18px;
+  color: #333;
+}
+
+.product-info {
+  font-size: 16px;
+  color: #555;
+}

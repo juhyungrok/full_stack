@@ -22,7 +22,7 @@ export const postPayment = async ({ cartItems, totalPrice }) => {
       totalPrice: totalPrice,
     };
 
-    const response = await api.post("/api/payment/kakaopay", paymentData);
+    const response = await api.post("/api/payment/tosspay", paymentData);
     localStorage.removeItem("cart");
     return response.data;
   } catch (error) {

@@ -41,7 +41,7 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
         merchant_uid: new Date().getTime().toString(), // 고유한 주문번호를 지정
         name: "키오스크",
         amount: totalPrice,
-        m_redirect_url: "http://192.168.0.13:8080/success",
+        m_redirect_url: "http://localhost:3000/success",
         // buyer_email: "test@naver.com",
         // buyer_name: "코드쿡",
         // buyer_tel: "010-1234-5678",
@@ -49,35 +49,20 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
         // buyer_postcode: "123-456",
       },
       async (rsp) => {
-        console.log(rsp);
         try {
-          //const { data } = await axios.post("/verifyIamport/" + rsp.imp_uid);
+          const { data } = await axios.post(
+            "http://localhost:8080/verifyIamport/" + rsp.imp_uid
+          );
 
           if (rsp.success) {
             alert("결제 성공");
-            try {
-              const paymentResult = await handlePayment({
-                cartItems,
-                totalPrice,
-              });
-              if (paymentResult.success) {
-                console.log("orderId:", paymentResult.data.orderId);
-                navigate("/success", {
-                  state: { orderId: paymentResult.data.orderId },
-                });
-              } else {
-                throw new Error("결제 처리 중 오류 발생");
-              }
-            } catch (error) {
-              console.error("결제 처리 중 오류 발생:", error);
-              alert("결제 처리 중 오류 발생");
-            }
           } else {
-            alert("결제 실패1");
+            alert("결제 실패");
+            navigate("/");
           }
         } catch (error) {
           console.error("결제 검증 중 에러 발생:", error);
-          alert("결제 실패2");
+          alert("결제 실패");
         }
       }
     );

@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
-import handlePayment from "../hooks/handlePayment";
-import KaKaoPayment from "../components/payments/KaKaoPayment";
 
 const selector = "#payment-widget";
 const clientKey = "test_ck_EP59LybZ8BLlbDDYvoDQV6GYo7pR";
@@ -42,19 +40,8 @@ export function CheckoutPage({ cartItems, totalPrice }) {
     <div>
       <h1>주문서</h1>
       <span>{`${price.toLocaleString()}원`}</span>
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            onChange={(event) => {
-              setPrice(event.target.checked ? price - 5_000 : price + 5_000);
-            }}
-          />
-          5,000원 할인 쿠폰 적용
-        </label>
-      </div>
+
       <div id="payment-widget" />
-      <KaKaoPayment cartItems={cartItems} totalPrice={totalPrice} />
 
       <button
         onClick={async () => {
