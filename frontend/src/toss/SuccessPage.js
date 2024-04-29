@@ -1,77 +1,123 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { handlePostPaymentAndFetchReceipt } from "../api";
+import "./SuccessPage.css";
+import { fetchReceipt, postPayment } from "../api";
 
 export function SuccessPage() {
   const [searchParams] = useSearchParams();
   const totalprice = searchParams.get("amount");
   const [showButton, setShowButton] = useState(true);
   const [receiptData, setReceiptData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handlePrintReceipt = async () => {
-    try {
-      const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+        if (cartItems.length === 0) {
+          alert("영수증 에러! 장바구니에 상품이 없습니다.");
+          window.location.href = "/"; // 홈 화면으로 이동
+          return;
+        }
+        // 주문 상품 정보를 적절한 형식으로 가공
+        const CARTITEM = cartItems.map((item) => ({
+          productId: item.productId,
+          amount: item.amount,
+          name: item.name,
+          size: item.selectedSize,
+          temperature: item.selectedTemperature,
+        }));
+        const paymentResult = await postPayment({
+          cartItems: CARTITEM, // Pass your cart items here
+          totalPrice: totalprice, // Pass the total price here
+        });
 
-      if (cartItems.length === 0) {
-        alert("영수증 에러! 장바구니에 상품이 없습니다.");
-        return;
+        if (paymentResult.success) {
+          // If payment is successful, set receipt data
+          console.log("Payment data received:", paymentResult.data);
+          const orderId = paymentResult.data.orderId;
+          if (!orderId) {
+            throw new Error("orderId를 찾을 수 없음!"); //오류발생 시 에러 메시지 설정
+          }
+          await handleViewReceipt(orderId);
+          setLoading(false);
+        } else {
+          throw new Error("결제 처리 중 오류가 발생했습니다.");
+        }
+      } catch (error) {
+        setError(error);
+        setLoading(false);
       }
+    };
 
-      // 주문 상품 정보를 적절한 형식으로 가공
-      const orderProducts = cartItems.map((item) => ({
-        productId: item.productId,
-        amount: item.amount,
-        name: item.name,
-        size: item.selectedSize,
-        temperature: item.selectedTemperature,
-      }));
+    fetchData(); // Call fetchData when component mounts
+  }, [totalprice]); // Ensure useEffect runs when totalprice changes
 
-      const receiptData = await handlePostPaymentAndFetchReceipt({
-        cartItems: orderProducts, // 가공된 주문 상품 정보를 전달
-        totalPrice: totalprice,
-      });
-
-      // Clear cart items after printing the receipt
-      localStorage.removeItem("cart");
-
-      console.log("receiptData:", receiptData);
-      // receiptData의 형식에 따라 영수증 정보를 출력할 수 있도록 수정
-      setReceiptData(receiptData);
-      setShowButton(false); // Hide the button after printing the receipt
+  const handleViewReceipt = async (orderId) => {
+    try {
+      console.log("Fetching receipt for orderId:", orderId); // orderId를 콘솔에 출력
+      const receipt = await fetchReceipt(orderId);
+      console.log("Receipt data:", receipt); // 받아온 영수증 데이터를 콘솔에 출력
+      setReceiptData(receipt);
     } catch (error) {
-      console.error("영수증 출력 중 오류가 발생했습니다:", error);
+      console.error("Error fetching receipt:", error);
+      setError(error);
     }
   };
 
   return (
-    <div>
-      <h1>결제 성공</h1>
-      <button>
-        <Link to="/">홈으로</Link>
-      </button>
-      <div>{`승인번호: ${searchParams.get("orderId")}`}</div>
-      <div>{`결제 금액: ${Number(totalprice).toLocaleString()}원`}</div>
-      {showButton && <button onClick={handlePrintReceipt}>영수증 출력</button>}
-      {receiptData && (
-        <div>
-          {/* Display receipt data here */}
-          <h2>영수증 정보</h2>
-          <p>주문 번호: {receiptData.orders.orderId}</p>
-          <p>주문 일시: {receiptData.orders.orderDatetime}</p>
-          <h3>주문 상품</h3>
-          <ul>
-            {receiptData.orderProducts.map((product, index) => (
-              <li key={index}>
-                {product.name} - {product.amount}개 ({product.size},{" "}
-                {product.temperature})
-              </li>
-            ))}
-          </ul>
-          <h3>결제 정보</h3>
-          <p>총 결제 금액: {receiptData.payment.totalPrice}원</p>
-          <p>결제 수단: {receiptData.payment.method}</p>
+    <div className="success-page">
+      <div className="content">
+        <div className="icon-container">
+          <i className="fas fa-check-circle"></i>
         </div>
-      )}
+        <h1>결제가 성공적으로 완료되었습니다!</h1>
+        <div className="details">
+          <p>
+            <strong>승인번호:</strong> {searchParams.get("orderId")}
+          </p>
+          <p>
+            <strong>결제 금액:</strong> {Number(totalprice).toLocaleString()}원
+          </p>
+          <p>
+            <strong>주문 번호:</strong> {receiptData?.orders?.orderId || ""}
+          </p>
+        </div>
+        <div className="buttons">
+          <Link to="/" className="btn btn-home">
+            <i className="fas fa-home"></i> 홈으로
+          </Link>
+          {showButton && (
+            <button className="btn btn-receipt">
+              <i className="fas fa-print"></i> 영수증 출력(아두이노 사용)
+            </button>
+          )}
+        </div>
+        {receiptData && receiptData.orders && (
+          <div className="receipt">
+            <h2>영수증</h2>
+            <p>주문 번호: {receiptData.orders.orderId}</p>
+            <p>결제 금액: {receiptData.payment.totalPrice}원</p>
+            <p>결제 수단: {receiptData.payment.method}</p>
+            <p>주문 날짜: {receiptData.orders.orderDatetime}</p>
+            <p>주문 상품 목록:</p>
+            <div className="product-list">
+              {receiptData.orderProducts.map((item, index) => (
+                <div className="product-item" key={index}>
+                  <div className="product-details">
+                    <p className="product-name">{item.name}</p>
+                    <p className="product-info">
+                      사이즈: {item.size}, 온도: {item.temperature}, 수량:{" "}
+                      {item.amount}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

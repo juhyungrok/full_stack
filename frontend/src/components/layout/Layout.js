@@ -25,8 +25,8 @@ const Layout = ({ children }) => {
     <styled.Container>
       <styled.Header>
         <styled.Logo>
-          <styled.CafeName>카페명</styled.CafeName>
-          <styled.Slogan>카페 슬로건</styled.Slogan>
+          <styled.CafeName>KIOSK</styled.CafeName>
+          <styled.Slogan>핸드폰에서 주문하기!</styled.Slogan>
         </styled.Logo>
         <styled.CartLink onClick={checkCart}>
           <styled.CartIcon />
@@ -36,16 +36,17 @@ const Layout = ({ children }) => {
       <main>{children}</main>
       <styled.Footer>
         <styled.CafeInfo>
-          <p>주소: 카페 주소</p>
-          <p>전화번호: 카페 전화번호</p>
-          <p>영업시간: 영업시간 정보</p>
+          <p>사색볼펜 : 주형록 | 정재호 | 우상욱 | 장찬현</p>
+          <p>카페키오스크: Non-Display</p>
         </styled.CafeInfo>
         <styled.SocialLinks>
-          <a href="링크">SNS 아이콘</a>
+          <a href="https://github.com/juhyungrok/full_stack">깃허브 정보</a>
           {/* SNS 아이콘은 원하는 SNS 아이콘 라이브러리를 사용하여 추가 */}
         </styled.SocialLinks>
         <styled.Terms>
-          <Link to="/terms">이용약관</Link>
+          <Link to="https://glory-phone-a3d.notion.site/bbb0816dd4314b60832ce953b9334bbb?pvs=4">
+            이용약관
+          </Link>
         </styled.Terms>
       </styled.Footer>
       <Accessmodal

@@ -6,7 +6,7 @@ import KaKaoPayment from "../components/payments/KaKaoPayment";
 
 const selector = "#payment-widget";
 const clientKey = "test_ck_EP59LybZ8BLlbDDYvoDQV6GYo7pR";
-const customerKey = "YbX2HuSlsC9uVJW6NMRMj";
+const customerKey = "test_sk_AQ92ymxN34YaXB0Jz4EpVajRKXvd";
 
 export function CheckoutPage({ cartItems, totalPrice }) {
   const paymentWidgetRef = useRef(null);
@@ -20,7 +20,7 @@ export function CheckoutPage({ cartItems, totalPrice }) {
       const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
         selector,
         { value: totalPrice },
-        { variantKey: "BRANDPAY" }
+        { variantKey: "DEFAULT" }
       );
 
       paymentWidgetRef.current = paymentWidget;

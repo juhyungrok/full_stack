@@ -24,12 +24,12 @@ export const Logo = styled.div`
 
 export const CafeName = styled.h1`
   margin: 0;
-  font-size: 24px;
+  font-size: 30px;
 `;
 
 export const Slogan = styled.span`
-  margin-left: 10px;
-  font-size: 16px;
+  margin-left: 50px;
+  font-size: 13px;
 `;
 
 export const CartLink = styled(Link)`

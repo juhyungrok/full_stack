@@ -7,7 +7,6 @@ const Mainpage = lazy(() => import("../pages/MainPage"));
 const Category = lazy(() => import("../pages/categories/CategoryPage.js"));
 const ProductDetail = lazy(() => import("../pages/ProductDetailsPage.js"));
 const Cart = lazy(() => import("../pages/cart/CartPage.js"));
-const Order = lazy(() => import("../pages/order/OrderPage.js"));
 
 const Loading = <div>Loading....</div>;
 

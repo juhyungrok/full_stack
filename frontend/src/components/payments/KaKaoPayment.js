@@ -41,8 +41,7 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
         merchant_uid: new Date().getTime().toString(), // 고유한 주문번호를 지정
         name: "키오스크",
         amount: totalPrice,
-        m_redirect_url: "http://localhost:3000/success",
-
+        m_redirect_url: "http://192.168.0.13:8080/success",
         // buyer_email: "test@naver.com",
         // buyer_name: "코드쿡",
         // buyer_tel: "010-1234-5678",
@@ -52,7 +51,7 @@ const KaKaoPayment = ({ cartItems, totalPrice }) => {
       async (rsp) => {
         console.log(rsp);
         try {
-          // const { data } = await axios.post("/verifyIamport/" + rsp.imp_uid);
+          //const { data } = await axios.post("/verifyIamport/" + rsp.imp_uid);
 
           if (rsp.success) {
             alert("결제 성공");
