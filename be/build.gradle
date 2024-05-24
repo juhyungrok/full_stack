@@ -1,3 +1,7 @@
+import jdk.jfr.Enabled
+
+
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.12'
@@ -9,12 +13,15 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     sourceCompatibility = '11'
+
 }
 
 repositories {
     mavenCentral()
 }
-
+jar{
+    enabled = false
+}
 
 configurations {
     compileOnly {
@@ -30,6 +37,7 @@ dependencies {
      implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'mysql:mysql-connector-java:8.0.26'
+    runtimeOnly 'mysql:mysql-connector-java'
     implementation 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -40,6 +48,7 @@ dependencies {
 
 
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()

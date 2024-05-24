@@ -3,7 +3,7 @@ import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 
 const selector = "#payment-widget";
-const clientKey = "test_ck_EP59LybZ8BLlbDDYvoDQV6GYo7pR";
+const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 const customerKey = "test_sk_AQ92ymxN34YaXB0Jz4EpVajRKXvd";
 
 export function CheckoutPage({ cartItems, totalPrice }) {
@@ -53,9 +53,9 @@ export function CheckoutPage({ cartItems, totalPrice }) {
             // 코드샌드박스 환경에선 요청 결과 페이지(`successUrl`, `failUrl`)로 이동할 수가 없으니 유의하세요.
             await paymentWidget?.requestPayment({
               orderId: nanoid(),
-              orderName: "토스 티셔츠 외 2건",
-              customerName: "김토스",
-              customerEmail: "customer123@gmail.com",
+              orderName: "QR코드 키오스크",
+              customerName: "GUEST",
+              customerEmail: "NULL",
               successUrl: `${window.location.origin}/success`,
               failUrl: `${window.location.origin}/fail`,
             });
