@@ -3,7 +3,6 @@ package com.kiosk.api.order.domain.repository;
 import com.kiosk.api.order.domain.entity.OrderLog;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
-import retrofit2.http.OPTIONS;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;

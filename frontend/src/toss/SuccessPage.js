@@ -105,7 +105,10 @@ export function SuccessPage() {
             <h2>영수증</h2>
             <p>=============================</p>
             <p>주문 번호: {receiptData.orders.orderId}</p>
-            <p>결제 금액: {receiptData.payment.totalPrice}원</p>
+            <p>
+              결제 금액:{" "}
+              {receiptData.payment.totalPrice.toLocaleString("ko-KR")}원
+            </p>
             <p>결제 수단: {receiptData.payment.method}</p>
             <p>주문 날짜: {receiptData.orders.orderDatetime}</p>
             <p>=============================</p>

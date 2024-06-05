@@ -3,10 +3,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Menu from "../menu/Menu";
-
 import * as styled from "./LayoutStyles";
-
 import Accessmodal from "../modal/Accessmodal";
+import cafeimg from "../../images/cafe.png";
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
@@ -26,7 +25,10 @@ const Layout = ({ children }) => {
       <styled.Header>
         <styled.Logo>
           <styled.CafeName>KIOSK</styled.CafeName>
-          <styled.Slogan>핸드폰에서 주문하기!</styled.Slogan>
+          <styled.Slogan>
+            <styled.HeaderIcon src={cafeimg} alt="핸드폰으로 주문하기!" />
+            핸드폰에서 주문하기!
+          </styled.Slogan>
         </styled.Logo>
         <styled.CartLink onClick={checkCart}>
           <styled.CartIcon />

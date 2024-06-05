@@ -4,8 +4,9 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.2",
+    "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^5.29.2",
-    "@testing-limmbrary/jest-dom": "^5.17.0",
+    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@tosspayments/payment-sdk": "^1.7.1",
@@ -16,6 +17,7 @@
     "http-proxy-middleware": "^3.0.0",
     "nanoid": "^5.0.6",
     "react": "^18.2.0",
+    "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
     "react-iamport": "^0.0.2",
     "react-icons": "^5.0.1",
@@ -24,6 +26,7 @@
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "sockjs-client": "^1.6.1",
     "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4"
   },
@@ -31,8 +34,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && aws s3 sync ./build s3://reactks3 --profile=s3react --delete",
+    "invalidate": "aws cloudfront create-invalidation --profile=s3react --distribution-id EXD91AFRTY6EJ --paths /*"
   },
+  "proxy": "http://localhost:8080",
   "eslintConfig": {
     "extends": [
       "react-app",

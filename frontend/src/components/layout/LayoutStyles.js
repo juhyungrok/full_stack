@@ -1,4 +1,4 @@
-// styles.js
+// LayoutStyles.js
 
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
-  overflow-x: auto; /* 가로 스크롤 항상 표시 */
+  overflow-x: auto;
 `;
 
 export const Header = styled.header`
@@ -14,7 +14,7 @@ export const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding: 20px; /* 헤더에 패딩 추가 */
+  padding: 20px;
 `;
 
 export const Logo = styled.div`
@@ -28,8 +28,10 @@ export const CafeName = styled.h1`
 `;
 
 export const Slogan = styled.span`
-  margin-left: 50px;
-  font-size: 13px;
+  margin-left: 10px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
 `;
 
 export const CartLink = styled(Link)`
@@ -97,19 +99,13 @@ export const CategoryContainer = styled.div`
     list-style: none;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(250px, 1fr)
-    ); // 기본적으로 한 줄에 2개의 카드를 표시
-    gap: 20px; // 아이템 사이의 간격
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
   }
 
   @media screen and (max-width: 768px) {
     ul {
-      grid-template-columns: repeat(
-        2,
-        1fr
-      ); // 화면 크기가 작아질 때는 한 줄에 2개의 카드를 표시
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 `;
@@ -118,12 +114,12 @@ export const ProductCard = styled.li`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden; // 내용이 카드를 넘어갈 경우 처리
+  overflow: hidden;
 
   img {
     width: 100%;
     display: block;
-    border-radius: 10px 10px 0 0; // 상단 부분만 둥글게 처리
+    border-radius: 10px 10px 0 0;
   }
 
   .product-info {
@@ -141,7 +137,14 @@ export const ProductCard = styled.li`
     font-size: 16px;
   }
 `;
+
 export const ProductImage = styled.img`
   width: 200px;
   height: auto;
+`;
+
+export const HeaderIcon = styled.img`
+  width: 30%;
+  height: 30%;
+  margin-right: 10px;
 `;

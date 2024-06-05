@@ -3,8 +3,8 @@ import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 
 const selector = "#payment-widget";
-const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const customerKey = "test_sk_AQ92ymxN34YaXB0Jz4EpVajRKXvd";
+const clientKey = process.env.REACT_APP_TOSS_CK;
+const customerKey = process.env.REACT_APP_TOSS_SK;
 
 export function CheckoutPage({ cartItems, totalPrice }) {
   const paymentWidgetRef = useRef(null);
@@ -13,6 +13,8 @@ export function CheckoutPage({ cartItems, totalPrice }) {
 
   useEffect(() => {
     (async () => {
+      console.log("Client Key:", clientKey);
+      console.log("Customer Key:", customerKey);
       const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
 
       const paymentMethodsWidget = paymentWidget.renderPaymentMethods(

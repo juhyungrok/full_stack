@@ -12,12 +12,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @RestController
 @RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @PostMapping("/api/payment/tosspay")
     public PaymentResultResponseDto payByCash(@RequestBody final TOSSPayByCardInDto tossPayByCardInDto,
@@ -31,6 +33,7 @@ public class PaymentController {
         }
 
         Long orderId = paymentService.createPaymentByCaedToss(tossPayByCardInDto);
+        messagingTemplate.convertAndSend("/topic/pyment-success", "결제 주문이 완료되었습니다.");
         return handle200(orderId, "토스 결제 성공하였습니다.");
     }
 

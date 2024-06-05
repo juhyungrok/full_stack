@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
-
+const { REACT_APP_BACKEND } = process.env;
+// 프록시 설정을 사용하여 백엔드 서버에 요청
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: REACT_APP_BACKEND,
 });
 
 export const getProducts = async () => {
@@ -31,10 +31,21 @@ export const postPayment = async ({ cartItems, totalPrice }) => {
     throw error;
   }
 };
+export const allOrderinfo = async () => {
+  try {
+    const response = await api.get("/api/receipt/all");
+    return response.data;
+  } catch (error) {
+    console.log("Error getting allreReipt:", error);
+    throw error;
+  }
+};
 
 export const fetchReceipt = async (orderId) => {
   try {
-    const response = await api.get(`/api/receipt?orderId=${orderId}`);
+    const response = await api.get(`/api/receipt`, {
+      params: { orderId },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching receipt:", error);

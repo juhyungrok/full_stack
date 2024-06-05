@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import KaKaoPayment from "../payments/KaKaoPayment";
-import TossPayment from "../payments/TossPayment";
 
 const ModalBackdrop = styled.div`
   position: fixed;
