@@ -94,11 +94,6 @@ export function SuccessPage() {
           <Link to="/" className="btn btn-home">
             <i className="fas fa-home"></i> 홈으로
           </Link>
-          {showButton && (
-            <button className="btn btn-receipt">
-              <i className="fas fa-print"></i> 영수증 출력(아두이노 사용)
-            </button>
-          )}
         </div>
         {receiptData && receiptData.orders && (
           <div className="receipt">

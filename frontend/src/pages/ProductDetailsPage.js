@@ -38,6 +38,13 @@ const OptionTitle = styled.p`
   margin-bottom: 10%;
 `;
 
+const ProductImage = styled.img`
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+`;
+
 const ProductDetailsPage = () => {
   const { productId } = useParams();
 
@@ -98,7 +105,7 @@ const ProductDetailsPage = () => {
       {product && (
         <>
           <DetailHeader menuName={product.name} />
-          <img src={product.imgUrl} alt={product.name} />
+          <ProductImage src={product.imgUrl} alt={product.name} />
           <p>{product.price}원</p>
           <OptionContainer>
             <OptionTitle>온도</OptionTitle>
@@ -110,7 +117,7 @@ const ProductDetailsPage = () => {
                 disabled={!product.hasHot}
               />
               <TemperatureButton
-                temperature="ice"
+                temperature="Ice"
                 selectedTemperature={selectedTemperature}
                 handleTemperatureClick={handleTemperatureClick}
                 disabled={!product.hasIce}
@@ -154,7 +161,6 @@ const ProductDetailsPage = () => {
               selectedSize: selectedSize,
             }}
           />
-          {/* 주문 정보 모듈 추가 */}
           <SectionContainer>
             <AddToCartButton
               product={{

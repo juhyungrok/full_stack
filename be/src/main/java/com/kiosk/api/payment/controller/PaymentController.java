@@ -5,21 +5,25 @@ import com.kiosk.api.payment.domain.dto.PaymentRequestDto.KakaoPayByCardInDto;
 import com.kiosk.api.payment.domain.dto.PaymentRequestDto.TOSSPayByCardInDto;
 import com.kiosk.api.payment.domain.dto.PaymentResultResponseDto;
 import com.kiosk.api.payment.service.PaymentService;
+import com.kiosk.api.websocket.Notification;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @RestController
 @RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final SimpMessagingTemplate messagingTemplate;
+
+    private final SimpMessagingTemplate template;
 
     @PostMapping("/api/payment/tosspay")
     public PaymentResultResponseDto payByCash(@RequestBody final TOSSPayByCardInDto tossPayByCardInDto,
@@ -33,7 +37,7 @@ public class PaymentController {
         }
 
         Long orderId = paymentService.createPaymentByCaedToss(tossPayByCardInDto);
-        messagingTemplate.convertAndSend("/topic/pyment-success", "결제 주문이 완료되었습니다.");
+        template.convertAndSend("/topic/notifications", new Notification("새로운 주문이 있습니다!"));
         return handle200(orderId, "토스 결제 성공하였습니다.");
     }
 

@@ -48,7 +48,7 @@ public class JdbcOrderLogRepositoryImpl implements OrderLogRepository {
     public List<OrderLog> findAllByDate(final LocalDate date) {
         String sql = "SELECT product_id, category_id, sales_amount, sales_date " +
                 "FROM order_log " +
-                "WHERE DATE(sales_date) = STR_TO_DATE(:date, '%Y-%m-%d')";
+                "WHERE DATE(sales_date) = :date";
 
         SqlParameterSource param = new MapSqlParameterSource("date", date.toString());
 

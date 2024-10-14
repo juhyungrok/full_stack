@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
       <main>{children}</main>
       <styled.Footer>
         <styled.CafeInfo>
-          <p>사색볼펜 : 주형록 | 정재호 | 우상욱 | 장찬현</p>
+          <p>사색볼펜 : 주형록 | 정재호 | 우상욱</p>
           <p>카페키오스크: Non-Display</p>
         </styled.CafeInfo>
         <styled.SocialLinks>

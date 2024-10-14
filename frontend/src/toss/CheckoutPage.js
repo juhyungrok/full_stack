@@ -42,7 +42,7 @@ export function CheckoutPage({ cartItems, totalPrice }) {
     <div>
       <h1>주문서</h1>
       <span>{`${price.toLocaleString()}원`}</span>
-
+      <p>(현제 test모드로 네이버페이를 지원하지 않음)</p>
       <div id="payment-widget" />
 
       <button

@@ -30,4 +30,5 @@ public class ReceiptService {
     public List<Orders> getAllOrders() {
         return ordersRepository.findAll();
     }
+
 }
