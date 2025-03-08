@@ -11,7 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@tosspayments/payment-sdk": "^1.7.1",
     "@tosspayments/payment-widget-sdk": "^0.10.2",
-    "axios": "^1.7.2",
+    "axios": "^1.8.2",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.3",
     "cors": "^2.8.5",
